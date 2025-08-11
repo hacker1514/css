@@ -11,6 +11,15 @@
             0% { transform: rotateY(0deg); }
             100% { transform: rotateY(360deg); }
         }
+        button {
+            color: white;
+            background-color: blue;
+            font-size: 20px;
+            border: solid lime;
+            margin: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body style="color:navy;background:linear-gradient(to left,lightpink,lightblue);">
@@ -20,62 +29,89 @@
     <center>
         <img src="https://hacker1514.github.io/python/kni.png" style="border:solid red;border-radius:50%" class="rotate" height="100" width="100">
         <br>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="c()">CLEAR</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="run()">RUN</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="contact()">CONTACT</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="feedback()">FEEDBACK</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="logout()">LOGOUT</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="save()">SAVE</button>
-        <button style="color:white;background-color:blue;font-size:35px;border:solid lime" onclick="install()">INSTALL</button>
+        <button onclick="c()">CLEAR</button>
+        <button onclick="run()">RUN</button>
+        <button onclick="contact()">CONTACT</button>
+        <button onclick="feedback()">FEEDBACK</button>
+        <button onclick="logout()">LOGOUT</button>
+        <button onclick="save()">SAVE</button>
+        <button onclick="install()">INSTALL</button>
         <audio src="https://hacker1514.github.io/creations/click.mp3" id="m"></audio>
         <h1>WORK HERE ON CSS</h1>
-        <textarea style="color:cyan;background-color:black;font-size:20px;height:300px;width:900px;border:solid cyan" id="css" autocapitalize="off">START FROM HERE !</textarea>
-        <h1 style="color:red;">OUTPUT : </h1>
+        <textarea style="color:cyan;background-color:black;font-size:20px;height:200px;width:90%;border:solid cyan" id="css" autocapitalize="off">h1 { color: red; }</textarea>
+        <h1 style="color:red;">OUTPUT:</h1>
     </center>
-    <div id="output" style="color:lime;background-color:black;font-size:20px;padding:10px;"></div>
+
+    <!-- Live preview iframe -->
+    <iframe id="preview" style="width:95%;height:300px;border:solid 2px black;margin:20px auto;display:block;"></iframe>
 
     <script>
+        let music = document.getElementById("m");
         let p;
+
         window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             p = e;
         });
+
         function install() {
             music.play();
-            if (p) {
-                p.prompt();
-            }
+            if (p) p.prompt();
         }
+
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('css.js');
         }
 
-        let music = document.getElementById("m");
-        let styleTag = document.createElement("style");
-        document.head.appendChild(styleTag);
-
         function c() {
             music.play();
-            location.reload();
+            document.getElementById("css").value = "";
+            let iframeDoc = document.getElementById("preview").contentDocument;
+            iframeDoc.open();
+            iframeDoc.write(`
+                <html>
+                <head></head>
+                <body>
+                    <h1>Sample Heading</h1>
+                    <p>Sample paragraph text</p>
+                </body>
+                </html>
+            `);
+            iframeDoc.close();
         }
+
         function contact() {
             music.play();
             window.open("https://hacker1514.github.io./python/contact.html", "_self");
         }
+
         function feedback() {
             music.play();
             window.open("https://hacker1514.github.io./python/feedback.html", "_self");
         }
+
         function logout() {
             music.play();
             window.open("https://hacker1514.github.io./css/login.html", "_self");
         }
+
         function run() {
             music.play();
             let code = document.getElementById("css").value;
-            styleTag.innerHTML = code; // Apply CSS live
-            document.getElementById("output").textContent = code; // Show code in output area
+            let iframeDoc = document.getElementById("preview").contentDocument;
+            iframeDoc.open();
+            iframeDoc.write(`
+                <html>
+                <head><style>${code}</style></head>
+                <body>
+                    <h1>Hi Hackers</h1>
+                    <p>continue from here </p>
+                </body>
+                </html>
+            `);
+            iframeDoc.close();
         }
+
         function save() {
             music.play();
             let text = document.getElementById("css").value;
@@ -88,6 +124,9 @@
                 link.click();
             }
         }
+
+        // Load default preview when page starts
+        run();
     </script>
 </body>
 </html>
